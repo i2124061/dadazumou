@@ -1,0 +1,51 @@
+/*
+Umi = 東方
+Yama = 西方
+*/
+using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.Timeline;
+using UnityEngine.Playables;
+
+public class visualYamaCS : MonoBehaviour
+{
+    public Sprite[] newSprite;
+    public SpriteRenderer spriteRenderer_2;
+
+    public delegate void SendEventCheck_yama(int randomImg);
+    public static event SendEventCheck_yama SendEventChecked_yama;
+
+    private int randomImg;
+
+    void Start()
+    {
+        spriteRenderer_2 = GetComponent<SpriteRenderer>();
+    }
+
+    private void OnEnable()
+    {
+        testCS.SecondTestChanged += OnSecondTestChange;
+    }
+
+    private void OnDisable()
+    {
+        testCS.SecondTestChanged -= OnSecondTestChange;
+    }
+
+    private void OnSecondTestChange(bool myTest_2)
+    {
+        if(myTest_2)
+        {
+            if(spriteRenderer_2 != null &&newSprite !=null)
+            {   
+                randomImg = Random.Range(0, 3);
+                Debug.Log(randomImg);
+                spriteRenderer_2.sprite = newSprite[randomImg];
+                myTest_2 = false;
+                SendEventChecked_yama(randomImg);
+            }
+        }
+    }
+}
