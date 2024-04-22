@@ -1,0 +1,50 @@
+/*
+Umi = 東方
+Yama = 西方
+*/
+using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.Timeline;
+using UnityEngine.Playables;
+
+public class visualUmiCS : MonoBehaviour
+{
+    public Sprite[] newSprite; //力士のビジュアル増設可能
+    public SpriteRenderer spriteRenderer_1;
+
+    public delegate void SendEventCheck_umi(int randomImg);
+    public static event SendEventCheck_umi SendEventChecked_umi;
+
+    private int randomImg;
+
+    void Start()
+    {
+        spriteRenderer_1 = GetComponent<SpriteRenderer>();
+    }
+
+    private void OnEnable()
+    {
+        testCS.TestChanged += OnTestChange;
+    }
+
+    private void OnDisable()
+    {
+        testCS.TestChanged -= OnTestChange;
+    }
+
+    private void OnTestChange(bool myTest_1)
+    {
+        if(myTest_1)
+        {
+            if(spriteRenderer_1 != null && newSprite !=null)
+            {
+                randomImg = Random.Range(0, 3);
+                Debug.Log("umi" + randomImg);
+                spriteRenderer_1.sprite = newSprite[randomImg];
+                SendEventChecked_umi(randomImg);
+            }
+        }
+    }
+}
