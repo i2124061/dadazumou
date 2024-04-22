@@ -1,0 +1,303 @@
+using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.Timeline;
+using System.Collections;
+using System.Collections.Generic;
+
+public class namiCS : MonoBehaviour
+{
+    public PlayableDirector playableDirector;
+
+    private float keyCount_nami = 0;
+    private float keyCountda_nami = 0;
+    private float previousCount_nami = 0;
+    private bool isPlaying = false;
+    
+    //アニメーションが飛んでしまわないように変数p,mで管理する
+    private bool p = false;
+    private bool m = false;
+
+    private bool isMis = false;
+    private bool isPls = false;
+    private bool isResetControl = false;
+    private bool isResetControl_end = false;
+
+    private bool startGame = false;
+
+    void Start()
+    {
+        playableDirector.Stop();
+        PlayTimelineForDuration(12f,12f);
+    }
+
+    private void OnEnable()
+    {
+        testCS.ResetTestChanged += OnResetTestChange;
+        titleKanriCS.StartChanged += OnStartChange;
+    }
+
+    private void OnDisable()
+    {
+        testCS.ResetTestChanged -= OnResetTestChange;
+        titleKanriCS.StartChanged -= OnStartChange;
+    }
+
+    private void OnResetTestChange(bool namiReset , bool isReset) 
+    {
+        if(namiReset)
+        {
+            isResetControl = true;
+        }
+        if(isReset)
+        {
+            isResetControl_end = true;
+        }
+    }
+    
+    private void OnStartChange(bool isStart)
+    {
+        if(isStart)
+        {
+            startGame = true;
+        }
+        if(!isStart)
+        {
+            startGame = false;
+            PlayTimelineForDuration(12f, 12f);
+            keyCountda_nami =0;
+        }
+    }
+    
+
+    void Update()
+    {
+        if(!isPlaying && startGame)
+        {  
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                keyCountda_nami ++;
+                keyCount_nami = keyCountda_nami;
+                p = true;
+                m = false;
+            }else if (Input.GetKeyDown(KeyCode.B))
+            {
+                keyCountda_nami --;
+                keyCount_nami = keyCountda_nami;
+                m = true;
+                p = false;
+            }    
+        }
+        if(keyCount_nami != previousCount_nami && !isPlaying)
+        {
+            if(keyCount_nami == -4 && p)
+            {
+                p = !p;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(3f,4f);
+
+            }else if(keyCount_nami == -3 && p)
+            {
+                p = !p;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(5f,6f);
+
+            }else if(keyCount_nami == -2 && p)
+            {
+                p = !p;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(7f,8f);
+
+            }else if(keyCount_nami == -1 && p)
+            {
+                p = !p;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(9f,10f);
+            }
+            else if(keyCount_nami == 0 && p)
+            {
+                p = !p;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(11f,12f);
+
+            }else if(keyCount_nami == 1 && p)
+            {
+                p = !p;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(13f,14f);
+
+            }else if(keyCount_nami == 2 && p)
+            {
+                p = !p;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(15f,16f);
+
+            }else if(keyCount_nami == 3 && p)
+            {
+                p = !p;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(17f,18f);
+
+            }else if(keyCount_nami == 4 && p)
+            {
+                p = !p;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(19f,20f);
+
+            }else if(keyCount_nami == 5 && p)
+            {
+                p = !p;
+                isPlaying = true;
+                isPls = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration_reset(21f,22f);
+
+            }
+
+            if(keyCount_nami == 4 && m)
+            {
+                m = !m;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(27f,28f);
+
+            }else if(keyCount_nami == 3 && m)
+            {
+                m = !m;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(29f,30f);
+
+            }else if(keyCount_nami == 2 && m)
+            {
+                m = !m;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(31f,32f);
+
+            }else if(keyCount_nami == 1 && m)
+            {
+                m = !m;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(33f,34f);
+
+            }else if(keyCount_nami == 0 && m)
+            {
+                m = !m;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(35f,36f);
+
+            }else if(keyCount_nami == -1 && m)
+            {
+                m = !m;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(37f,38f);
+
+            }else if(keyCount_nami == -2 && m)
+            {
+                m = !m;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(39f,40f);
+
+            }else if(keyCount_nami == -3 && m)
+            {
+                m = !m;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(41f,42f);
+
+            }else if(keyCount_nami == -4 && m)
+            {
+                m = !m;
+                isPlaying = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration(43f,44f);
+
+            }else if(keyCount_nami == -5 && m)
+            {
+                m = !m;
+                isPlaying = true;
+                isMis = true;
+                previousCount_nami = keyCount_nami;
+                PlayTimelineForDuration_reset(45f,46f);
+
+            }
+        
+        }
+       if(isMis &&isResetControl) //波を初期位置に戻す
+        {
+            isMis = false;
+            ReStart(50f,51f);
+        }else if(isPls && isResetControl)
+        {
+            isPls = false;
+            ReStart(52f,53f);
+        }
+
+        if(isResetControl_end)
+        {
+            isResetControl_end = false;
+            isPlaying = false;
+        }
+    }
+    
+
+    void PlayTimelineForDuration(float startSeconds, float endSeconds)
+    {
+        playableDirector.time = startSeconds; // 再生を開始する時間を設定
+        playableDirector.Play(); // Timelineの再生を開始
+
+        // 指定した時間で再生を止める
+        StartCoroutine(StopTimelineAfterDuration(endSeconds - startSeconds));
+    }
+
+    void ReStart(float reStartSeconds, float reEndSeconds)
+    {
+        playableDirector.time = reStartSeconds;
+        playableDirector.Play(); 
+
+        StartCoroutine(ResetStopTimeline(reEndSeconds - reStartSeconds));
+    }
+
+    IEnumerator StopTimelineAfterDuration(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        playableDirector.Stop();
+        isPlaying = false;
+    }
+
+    void PlayTimelineForDuration_reset(float startSeconds, float endSeconds)
+    {
+        playableDirector.time = startSeconds;
+        playableDirector.Play();
+
+        StartCoroutine(StopTimelineAfterDuration_reset(endSeconds - startSeconds));
+    }
+     IEnumerator StopTimelineAfterDuration_reset(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        playableDirector.Stop();
+    }
+
+    IEnumerator ResetStopTimeline(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        playableDirector.Stop();
+        keyCountda_nami = 0;
+        keyCount_nami = 0;
+        previousCount_nami = 0;
+        isResetControl = false;
+    }
+}
