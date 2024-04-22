@@ -1,0 +1,137 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.Playables;
+
+public class titleKanriCS : MonoBehaviour
+{
+    public PlayableDirector playableDirector; //TimelineのPlayableDirectorをアタッチ
+    
+    private bool isStart_kamo = false;
+    private bool isStart = false;
+    private bool isReset = false;
+    private bool isContinue = false;
+    private bool isContinue_2 = false;
+
+    private float pushTime = 0f;
+    private float titleTime = 10f;
+
+    public delegate void OnStartChange(bool isStart);
+    public static event OnStartChange StartChanged;
+
+    public AudioSource audioSource;
+    public AudioClip audioClip_1;
+    public AudioClip audioClip_2;
+
+    private void OnEnable()
+    {
+        testCS.SyokiKanried += OnSyokiKanri;
+        testCS.IsPlused += OnIsPlus;
+        testCS.IsMinaed += OnIsMina;
+    }
+
+    private void OnDisable()
+    {
+        testCS.SyokiKanried -= OnSyokiKanri;
+        testCS.IsPlused -= OnIsPlus;
+        testCS.IsMinaed -= OnIsMina;
+    }
+
+    private void OnSyokiKanri(bool syoki)
+    {
+        if(!syoki)
+        {
+            isContinue = true;
+        }else{
+            isContinue = false;
+        }
+    }
+
+    private void OnIsPlus(bool isPlus)
+    {
+        if(isPlus)
+        {
+            StartCoroutine(PlayTimelineForDuration(8f, 12f)); //西の勝ち
+        }
+    }
+
+    private void OnIsMina(bool isMina)
+    {
+        if(isMina)
+        {
+            StartCoroutine(PlayTimelineForDuration(3f, 7f)); //東の勝ち
+        }
+    }
+
+    void Start()
+    {
+        playableDirector.Pause();
+    }
+
+    void Update()
+    {
+        if ((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.B)) && !isReset)
+        {
+            if(!isStart_kamo) //スタート画面からの開始
+            {
+                isStart_kamo = true;
+                StartCoroutine(PlayOnsei()); //開始音
+                StartCoroutine(PlayTimelineForDuration(0f, 2f)); //タイトル画面から切り替わる
+            }else{
+                pushTime = 0f;
+            }
+        }
+
+        if(isStart)
+        {
+            pushTime += Time.deltaTime; //最後のインタラクションからの時間経過を記録
+        }
+        
+        if((isStart && pushTime >= titleTime)) //遊び終わってから一定時間が経つとタイトル画面に戻る
+        {
+            isReset = true;
+            isStart = false;
+            isContinue = false;
+            isContinue_2 = true;
+            StartChanged?.Invoke(isStart);
+            Debug.Log("届いてるよ");
+            StartCoroutine(PlayTimelineForDuration(13f, 15f));
+        }
+        if((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.B)) && isContinue) //繰り返し遊ぶ場合、開始の音が変わる
+        {
+            isContinue = false;
+            audioSource.clip = audioClip_2;
+            audioSource.Play();
+            isStart = true;
+            StartChanged?.Invoke(isStart);
+        }
+    }
+
+   IEnumerator PlayTimelineForDuration(float startTime, float endTime)
+    {
+        playableDirector.time = startTime;
+        playableDirector.Play();
+
+        yield return new WaitForSeconds(endTime - startTime);
+        playableDirector.Pause();
+
+        if((pushTime >= titleTime) || isContinue_2) //タイトル画面に戻ったらリセット
+        {
+            pushTime = 0f;
+            isReset = false;
+            isStart_kamo = false;
+            isContinue_2 = false;
+        }
+
+    }
+    IEnumerator PlayOnsei()
+    {
+        if(isStart_kamo) //スタート画面からの開始音
+        {
+            audioSource.clip = audioClip_1;
+            audioSource.Play();
+            yield return new WaitForSeconds(audioSource.clip.length);
+            isStart = true;
+            StartChanged?.Invoke(isStart);
+        }
+    }
+}
